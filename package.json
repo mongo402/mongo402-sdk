@@ -1,0 +1,66 @@
+{
+  "name": "@mongo402/sdk",
+  "version": "1.0.0",
+  "description": "Official SDK for mongo402 - Pay-per-query MongoDB access using x402 protocol with USDC on Solana",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./buyer": {
+      "require": "./dist/buyer/index.js",
+      "import": "./dist/buyer/index.mjs",
+      "types": "./dist/buyer/index.d.ts"
+    },
+    "./seller": {
+      "require": "./dist/seller/index.js",
+      "import": "./dist/seller/index.mjs",
+      "types": "./dist/seller/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mongo402",
+    "mongodb",
+    "x402",
+    "solana",
+    "usdc",
+    "pay-per-query",
+    "api",
+    "sdk"
+  ],
+  "author": "mongo402",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mongo402/sdk"
+  },
+  "homepage": "https://mongo402.xyz",
+  "peerDependencies": {
+    "@solana/web3.js": "^1.87.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0",
+    "eslint": "^8.55.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0"
+  }
+}
