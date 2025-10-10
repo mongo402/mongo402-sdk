@@ -159,3 +159,80 @@ await client.query.aggregate('slug', [
   { $group: { _id: '$type', count: { $sum: 1 } } },
 ]);
 ```
+
+
+## Authentication
+
+mongo402 uses Phantom wallet for authentication:
+
+```typescript
+import { BuyerClient } from '@mongo402/sdk/buyer';
+
+const client = new BuyerClient();
+
+// 1. Get nonce message
+const { message, nonce } = await client.auth.getNonce();
+
+// 2. Sign with Phantom wallet
+const encodedMessage = new TextEncoder().encode(message);
+const { signature } = await window.solana.signMessage(encodedMessage, 'utf8');
+
+// 3. Authenticate
+const auth = await client.auth.authenticateWallet(
+  window.solana.publicKey.toString(),
+  Buffer.from(signature).toString('base64'),
+  message
+);
+
+console.log('Logged in as:', auth.user.wallet_address);
+```
+
+## Error Handling
+
+```typescript
+import { 
+  PaymentRequiredError, 
+  AuthenticationError,
+  NotFoundError 
+} from '@mongo402/sdk';
+
+try {
+  const result = await client.queryFree('paid-endpoint', query);
+} catch (error) {
+  if (error instanceof PaymentRequiredError) {
+    console.log('Payment needed:', error.paymentInfo);
+  } else if (error instanceof AuthenticationError) {
+    console.log('Please login first');
+  } else if (error instanceof NotFoundError) {
+    console.log('Endpoint not found');
+  }
+}
+```
+
+## Configuration
+
+```typescript
+const client = new BuyerClient({
+  baseUrl: 'https://mongo402.xyz/api', // API base URL
+  timeout: 30000, // Request timeout in ms
+  network: 'devnet', // Solana network
+  accessToken: 'jwt-token', // Optional auth token
+});
+```
+
+## Networks
+
+| Network | Description |
+|---------|-------------|
+| `devnet` | Solana Devnet (testing) |
+| `mainnet-beta` | Solana Mainnet (production) |
+
+## Links
+
+- 🌐 [Website](https://mongo402.xyz)
+- 📚 [API Docs](https://mongo402.xyz/docs)
+- 🐙 [GitHub](https://github.com/mongo402/sdk)
+
+## License
+
+MIT © mongo402
