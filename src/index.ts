@@ -43,3 +43,19 @@ export {
   USDC_MINT,
   SOLANA_RPC,
 } from './core/constants';
+
+// Utilities
+export {
+  query,
+  QueryBuilder,
+  formatUsdc,
+  lamportsToUsdc,
+  usdcToLamports,
+  truncateAddress,
+  isValidSolanaAddress,
+  isValidSlug,
+  isQueryResponse,
+  isQueryError,
+  isEndpointPublic,
+  isX402Response,
+} from './utils';
