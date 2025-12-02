@@ -24,8 +24,10 @@ export function isValidSlug(slug: string): boolean {
  * Validate USDC amount (must be positive and have max 6 decimals)
  */
 export function isValidUsdcAmount(amount: number): boolean {
+  if (typeof amount !== 'number' || isNaN(amount)) return false;
   if (amount < 0) return false;
   if (amount > 10) return false; // Max price per query
+  if (!isFinite(amount)) return false;
   
   // Check for max 6 decimal places
   const decimals = amount.toString().split('.')[1];
