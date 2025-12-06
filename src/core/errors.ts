@@ -14,7 +14,7 @@ export class Mongo402Error extends Error {
 }
 
 export class AuthenticationError extends Mongo402Error {
-  constructor(message: string = 'Authentication failed') {
+  constructor(message: string = 'Authentication failed. Please ensure you have a valid access token.') {
     super(message, 'AUTH_ERROR', 401);
     this.name = 'AuthenticationError';
   }
@@ -35,7 +35,7 @@ export class PaymentRequiredError extends Mongo402Error {
 }
 
 export class NotFoundError extends Mongo402Error {
-  constructor(message: string = 'Resource not found') {
+  constructor(message: string = 'The requested endpoint or resource was not found.') {
     super(message, 'NOT_FOUND', 404);
     this.name = 'NotFoundError';
   }
