@@ -29,9 +29,10 @@ export function isValidUsdcAmount(amount: number): boolean {
   if (amount > 10) return false; // Max price per query
   if (!isFinite(amount)) return false;
   
-  // Check for max 6 decimal places
-  const decimals = amount.toString().split('.')[1];
-  if (decimals && decimals.length > 6) return false;
+  // Check for max 6 decimal places by multiplying and checking if it's an integer
+  // This handles scientific notation correctly
+  const scaled = amount * 1_000_000;
+  if (!Number.isInteger(Math.round(scaled * 1e10) / 1e10)) return false;
   
   return true;
 }
