@@ -4,13 +4,9 @@
 
 import { HttpClient } from '../core/http';
 import { API_ENDPOINTS } from '../core/constants';
-import { PaymentRequiredError } from '../core/errors';
 import type {
   QueryRequest,
   QueryResponse,
-  QueryOperation,
-  X402Response,
-  X402PaymentPayload,
 } from '../types';
 
 export interface QueryOptions {

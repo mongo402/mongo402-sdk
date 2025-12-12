@@ -51,8 +51,6 @@ export class EndpointsService {
   async getEndpointBySlug(slug: string): Promise<EndpointDetail> {
     return this.http.get<EndpointDetail>(`${API_ENDPOINTS.QUERY}/${slug}`);
   }
-}
-
 
   // ============ Seller Methods (require authentication) ============
 

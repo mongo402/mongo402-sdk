@@ -9,7 +9,6 @@ import { EndpointsService } from '../services/endpoints';
 import { QueryService } from '../services/query';
 import { StarsService } from '../services/stars';
 import { buildPaymentHeader } from '../x402/header';
-import { parseX402Response } from '../x402/parser';
 import type { BuyerConfig, QueryRequest, QueryResponse, EndpointDetail } from '../types';
 import type { X402PaymentInfo, TransactionResult } from '../x402/types';
 

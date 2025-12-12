@@ -28,22 +28,12 @@ export interface RequestOptions {
 
 export class HttpClient {
   private config: HttpClientConfig;
-  private retryCount: number = 3;
-  private retryDelay: number = 1000;
 
   constructor(config: Partial<Mongo402Config> = {}) {
     this.config = {
       baseUrl: config.baseUrl || DEFAULT_BASE_URL,
       timeout: config.timeout || DEFAULT_TIMEOUT,
     };
-  }
-
-  /**
-   * Configure retry behavior
-   */
-  setRetryConfig(count: number, delayMs: number): void {
-    this.retryCount = count;
-    this.retryDelay = delayMs;
   }
 
   setAccessToken(token: string | undefined): void {
@@ -132,7 +122,7 @@ export class HttpClient {
     let errorData: { detail?: string; error?: string } = {};
     if (isJson) {
       try {
-        errorData = await response.json();
+        errorData = await response.json() as { detail?: string; error?: string };
       } catch {
         // Ignore JSON parse errors
       }
