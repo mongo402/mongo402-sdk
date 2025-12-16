@@ -231,7 +231,7 @@ const client = new BuyerClient({
 
 - 🌐 [Website](https://mongo402.xyz)
 - 📚 [API Docs](https://mongo402.xyz/docs)
-- 🐙 [GitHub](https://github.com/mongo402/sdk)
+- 🐙 [GitHub](https://github.com/mongo402/mongo402-sdk)
 
 ## License
 
