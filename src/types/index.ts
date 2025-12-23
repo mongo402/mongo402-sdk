@@ -74,6 +74,14 @@ export interface SchemaInfo {
 
 // ============ Endpoint Types ============
 
+// ============ Cache Configuration Types ============
+
+export interface CacheConfig {
+  enabled: boolean;
+  ttl_seconds: number;
+  discount_percent: number;
+}
+
 export interface EndpointPublic {
   id: string;
   name: string;
@@ -90,12 +98,17 @@ export interface EndpointPublic {
   stars: number;
   tags: string[];
   category: string;
+  // Cache configuration - Refs: Requirements 4.1, 5.3
+  cache_enabled: boolean;
+  cache_ttl_seconds: number;
+  cache_discount_percent: number;
 }
 
 export interface EndpointDetail extends EndpointPublic {
   schema_info?: SchemaInfo;
   sample_data: Record<string, unknown>[];
   created_at: string;
+  // Cache fields inherited from EndpointPublic
 }
 
 export interface EndpointCreate {
@@ -110,6 +123,10 @@ export interface EndpointCreate {
   solana_wallet: string;
   tags?: string[];
   category?: string;
+  // Cache configuration - Refs: Requirements 1.1
+  cache_enabled?: boolean;
+  cache_ttl_seconds?: number;
+  cache_discount_percent?: number;
 }
 
 export interface EndpointUpdate {
@@ -119,6 +136,10 @@ export interface EndpointUpdate {
   is_active?: boolean;
   tags?: string[];
   category?: string;
+  // Cache configuration updates - Refs: Requirements 1.1
+  cache_enabled?: boolean;
+  cache_ttl_seconds?: number;
+  cache_discount_percent?: number;
 }
 
 export interface EndpointResponse {
@@ -143,6 +164,10 @@ export interface EndpointResponse {
   category: string;
   schema_info?: SchemaInfo;
   sample_data: Record<string, unknown>[];
+  // Cache configuration - Refs: Requirements 4.1, 5.3
+  cache_enabled: boolean;
+  cache_ttl_seconds: number;
+  cache_discount_percent: number;
 }
 
 
@@ -159,6 +184,8 @@ export interface QueryRequest {
   skip?: number;
   pipeline?: Record<string, unknown>[];
   field?: string;
+  /** Whether to use cached data if available (default: true) - Refs: Requirements 5.1 */
+  use_cache?: boolean;
 }
 
 export interface QueryResponse<T = unknown> {
@@ -167,6 +194,12 @@ export interface QueryResponse<T = unknown> {
   count?: number;
   execution_time_ms: number;
   cost_usdc: number;
+  /** Whether the result came from cache - Refs: Requirements 5.2 */
+  is_cached: boolean;
+  /** Seconds until cache expiration (only if is_cached=true) - Refs: Requirements 5.2 */
+  cache_ttl_remaining?: number;
+  /** Actual cost charged (may differ from cost_usdc if cached) - Refs: Requirements 5.2 */
+  actual_cost_usdc: number;
 }
 
 export interface QueryErrorResponse {

@@ -69,12 +69,21 @@ export class BuyerClient {
 
   /**
    * Execute a query on a free endpoint
+   * @param slug - Endpoint slug
+   * @param query - Query parameters
+   * @param options - Additional options
+   * @param options.useCache - Whether to use cached data if available (default: true)
    */
   async queryFree<T = unknown>(
     slug: string,
-    query: QueryRequest
+    query: QueryRequest,
+    options?: { useCache?: boolean }
   ): Promise<QueryResponse<T>> {
-    return this.query.execute<T>(slug, query);
+    const queryWithCache = {
+      ...query,
+      use_cache: options?.useCache ?? true,
+    };
+    return this.query.execute<T>(slug, queryWithCache);
   }
 
   /**
@@ -82,14 +91,21 @@ export class BuyerClient {
    * @param slug - Endpoint slug
    * @param query - Query parameters
    * @param transaction - Completed Solana transaction result
+   * @param options - Additional options
+   * @param options.useCache - Whether to use cached data if available (default: true)
    */
   async queryPaid<T = unknown>(
     slug: string,
     query: QueryRequest,
-    transaction: TransactionResult
+    transaction: TransactionResult,
+    options?: { useCache?: boolean }
   ): Promise<QueryResponse<T>> {
     const paymentHeader = buildPaymentHeader(transaction, this._network);
-    return this.query.execute<T>(slug, query, { paymentHeader });
+    const queryWithCache = {
+      ...query,
+      use_cache: options?.useCache ?? true,
+    };
+    return this.query.execute<T>(slug, queryWithCache, { paymentHeader });
   }
 
   /**

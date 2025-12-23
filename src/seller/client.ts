@@ -108,6 +108,16 @@ export class SellerClient {
     return this.endpoints.updateEndpoint(endpointId, { price_usdc: priceUsdc });
   }
 
+  /**
+   * Invalidate all cached results for an endpoint
+   * Refs: Requirements 6.1
+   * @param endpointId - The endpoint ID to invalidate cache for
+   * @returns The count of invalidated cache entries
+   */
+  async invalidateCache(endpointId: string): Promise<{ invalidated_count: number }> {
+    return this.endpoints.invalidateCache(endpointId);
+  }
+
   // ============ Revenue & Analytics ============
 
   /**

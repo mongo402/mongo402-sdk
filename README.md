@@ -131,6 +131,7 @@ if (paymentInfo) {
 | `getMyEndpoints()` | List your endpoints |
 | `updateEndpoint(id, data)` | Update endpoint |
 | `deleteEndpoint(id)` | Delete endpoint |
+| `invalidateCache(id)` | Clear cached results for endpoint |
 | `getPaymentHistory(limit?)` | View payments received |
 | `getRevenueStats()` | Get revenue statistics |
 
@@ -159,6 +160,56 @@ await client.query.aggregate('slug', [
   { $group: { _id: '$type', count: { $sum: 1 } } },
 ]);
 ```
+
+## Caching
+
+Some endpoints support caching, which can reduce costs for frequently requested data.
+
+### Using Cached Data (Buyers)
+
+```typescript
+// Query with caching enabled (default)
+const result = await client.queryFree('endpoint-slug', {
+  operation: 'find',
+  filter: { status: 'active' },
+});
+
+// Check if result came from cache
+if (result.is_cached) {
+  console.log(`Cached result, expires in ${result.cache_ttl_remaining}s`);
+  console.log(`Paid: ${result.actual_cost_usdc} USDC (discounted)`);
+}
+
+// Force fresh data (bypass cache)
+const freshResult = await client.queryFree('endpoint-slug', 
+  { operation: 'find', filter: {} },
+  { useCache: false }
+);
+```
+
+### Cache Configuration (Sellers)
+
+```typescript
+// Create endpoint with caching enabled
+const endpoint = await client.createEndpoint({
+  name: 'Cached Data API',
+  // ... other fields
+  cache_enabled: true,
+  cache_ttl_seconds: 300,      // Cache for 5 minutes
+  cache_discount_percent: 50,   // 50% off for cached results
+});
+
+// Invalidate cache when data changes
+await client.invalidateCache(endpoint.id);
+```
+
+### Cache Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `is_cached` | boolean | Whether result came from cache |
+| `cache_ttl_remaining` | number | Seconds until cache expires |
+| `actual_cost_usdc` | number | Actual price charged (may be discounted) |
 
 
 ## Authentication

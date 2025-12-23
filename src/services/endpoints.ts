@@ -93,4 +93,16 @@ export class EndpointsService {
   async deleteEndpoint(endpointId: string): Promise<{ message: string }> {
     return this.http.delete<{ message: string }>(`${API_ENDPOINTS.ENDPOINTS}/${endpointId}`);
   }
+
+  /**
+   * Invalidate all cached results for an endpoint
+   * Requires authentication and ownership
+   * Refs: Requirements 6.1
+   */
+  async invalidateCache(endpointId: string): Promise<{ invalidated_count: number }> {
+    return this.http.post<{ invalidated_count: number }>(
+      `${API_ENDPOINTS.ENDPOINTS}/${endpointId}/invalidate-cache`,
+      {}
+    );
+  }
 }
